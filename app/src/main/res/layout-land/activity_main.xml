@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/relativeLayout1">
+
+                        <TextView
+                            android:id="@+id/txtArduino"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="text from Arduino"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <Spinner
+                            android:id="@+id/delayTime"
+                            android:text="@+id/delayTime"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical"
+                            android:entries="@array/delayTime"
+                            android:layout_below="@+id/coolTime"
+                            android:layout_marginTop="10dp"
+                            android:layout_alignLeft="@+id/coolTime"
+                            android:layout_alignRight="@+id/coolTime"
+                            android:dropDownWidth="80dp"/>
+
+                        <TextView
+                            android:id="@+id/textViewDT"
+                            android:text="Время опроса"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/delayTime"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/delayTime"
+                            android:layout_alignBaseline="@id/delayTime"/>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="325dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:id="@+id/relativeLayout2">
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_above="@+id/textView5"
+                                android:layout_marginBottom="10dp"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker1"
+                                android:layout_alignBottom="@id/numberPicker1"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker2"
+                                android:layout_alignBottom="@id/numberPicker2"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker3"
+                                android:layout_alignBottom="@+id/numberPicker3"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants" />
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_alignParentBottom="true"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker5"
+                                android:layout_alignBottom="@id/numberPicker5"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker6"
+                                android:layout_alignBottom="@id/numberPicker6"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants"/>
+
+                            <NumberPicker
+                                android:id="@+id/numberPicker8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/PikerHeight"
+                                android:layout_toRightOf="@+id/numberPicker7"
+                                android:layout_alignBottom="@+id/numberPicker7"
+                                android:layout_marginBottom="@dimen/PikerMarginBottom"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"
+                                android:descendantFocusability="blocksDescendants" />
+                            <TextView
+                                android:id="@+id/textView1"
+                                android:text="Точка 1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker1"
+                                android:layout_alignLeft="@+id/numberPicker1"
+                                android:layout_marginBottom="10dp"         />
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:text="Точка 2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker2"
+                                android:layout_alignLeft="@+id/numberPicker2"
+                                android:layout_marginBottom="10dp"         />
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:text="Точка 3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker3"
+                                android:layout_alignLeft="@+id/numberPicker3"
+                                android:layout_marginBottom="10dp"         />
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:text="Точка 4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker4"
+                                android:layout_alignLeft="@+id/numberPicker4"
+                                android:layout_marginBottom="10dp"
+                                />
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:text="Точка 5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@id/numberPicker5"
+                                android:layout_alignLeft="@+id/numberPicker5"
+                                android:layout_marginBottom="10dp"         />
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:text="Точка 6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker6"
+                                android:layout_alignLeft="@+id/numberPicker6"
+                                android:layout_marginBottom="10dp"         />
+                            <TextView
+                                android:id="@+id/textView7"
+                                android:text="Точка 7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker7"
+                                android:layout_alignLeft="@+id/numberPicker7"
+                                android:layout_marginBottom="10dp"         />
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:text="Точка 8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/numberPicker8"
+                                android:layout_alignLeft="@+id/numberPicker8"
+                                android:layout_marginBottom="10dp"/>
+
+                            <Button
+                                android:id="@+id/readDots"
+                                android:text="Считать значения"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@id/textView1"
+                                android:layout_marginBottom="10dp"
+                                android:layout_alignParentLeft="true"/>
+
+                            <Button
+                                android:id="@+id/applyDots"
+                                android:text="Применить"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@id/readDots"
+                                android:layout_toRightOf="@id/readDots"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="@dimen/PikerMarginLeft"/>
+                        </RelativeLayout>
+
+                        <ToggleButton
+                            android:id="@+id/checkTBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textOn="Проверка при старке"
+                            android:textOff="Нет проверки при старте"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="10dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/textViewCT"
+                            android:text="Время проверки"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/coolTime"
+                            android:layout_alignBaseline="@id/coolTime"
+                            />
+
+                        <Spinner
+                            android:id="@+id/coolTime"
+                            android:text="@+id/coolTime"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical"
+                            android:entries="@array/coolTime"
+                            android:layout_below="@+id/checkTBtn"
+                            android:layout_alignRight="@+id/checkTBtn"
+                            android:layout_alignEnd="@+id/checkTBtn"
+                            android:dropDownWidth="80dp"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/relativeLayout3">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rLonOff"
+                            android:layout_centerHorizontal="true">
+
+                            <Button
+                                android:id="@+id/btnOn"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:text="Вкл. все"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginLeft="0dp"
+                                android:layout_alignParentTop="true"/>
+
+                            <Button
+                                android:id="@+id/btnOff"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Выкл. все"
+                                android:layout_toRightOf="@id/btnOn"/>
+
+                        </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/btnR1"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="Реле 1"
+                            android:layout_below="@+id/rLonOff"/>
+
+                        <Button
+                            android:id="@+id/btnR2"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="Реле 2"
+                            android:layout_toRightOf="@id/btnR1"
+                            android:layout_alignBaseline="@id/btnR1"/>
+
+                        <Button
+                            android:id="@+id/btnR3"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="Реле 3"
+                            android:layout_alignBaseline="@id/btnR2"
+                            android:layout_toRightOf="@id/btnR2"/>
+
+                        <Button
+                            android:id="@+id/btnR4"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="Реле 4"
+                            android:layout_alignBaseline="@id/btnR3"
+                            android:layout_toRightOf="@id/btnR3"/>
+
+                        <Button
+                            android:id="@+id/btnCncl"
+                            android:text="Отменить ручное управление"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/btnR1"
+                            android:layout_centerInParent="true" />
+
+                        <Button
+                            android:id="@+id/btnReset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Перезагрузить Arduino"
+                            android:layout_centerInParent="true"
+                            android:layout_below="@id/btnCncl"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</RelativeLayout>
