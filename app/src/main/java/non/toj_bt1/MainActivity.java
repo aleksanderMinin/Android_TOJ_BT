@@ -153,24 +153,29 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         //toj_temp_377
         //123456789012
         if ((sbprint.length() == 12) && sbprint.substring(0,9).equals("toj_temp_")) {
-            setStatedtTxt(sbprint, NumberPicker1, dtTxt1);
-            setStatedtTxt(sbprint, NumberPicker2, dtTxt2);
-            setStatedtTxt(sbprint, NumberPicker3, dtTxt3);
-            setStatedtTxt(sbprint, NumberPicker4, dtTxt4);
-            setStatedtTxt(sbprint, NumberPicker5, dtTxt5);
-            setStatedtTxt(sbprint, NumberPicker6, dtTxt6);
-            setStatedtTxt(sbprint, NumberPicker7, dtTxt7);
-            setStatedtTxt(sbprint, NumberPicker8, dtTxt8);
+            int tempVal = Integer.valueOf(sbprint.substring(9,12));
+            setStatedtTxt(tempVal, 0, NumberPicker1.getValue(), dtTxt1, null);
+            setStatedtTxt(tempVal, NumberPicker2.getValue(), NumberPicker3.getValue(), dtTxt2, dtTxt3);
+            setStatedtTxt(tempVal, NumberPicker4.getValue(), NumberPicker5.getValue(), dtTxt4, dtTxt5);
+            setStatedtTxt(tempVal, NumberPicker6.getValue(), NumberPicker7.getValue(), dtTxt6, dtTxt7);
+            setStatedtTxt(tempVal, NumberPicker8.getValue(), 0 , dtTxt8, null);
         }
     }
 
-    private void setStatedtTxt(String sbprint, NumberPicker NP, LinearLayout dtTxt) {
+    private void setStatedtTxt(int val, int numPick1, int numPick2, LinearLayout dtTxt01 , LinearLayout dtTxt02) {
         //toj_temp_377
         //123456789012
-        if (NP.getValue() > Integer.valueOf(sbprint.substring(9,12)))
-            dtTxt.setBackgroundColor(getColor(android.R.color.holo_green_light));
-        else
-            dtTxt.setBackgroundColor(getColor(android.R.color.holo_red_light));
+        if (numPick1 > val && val > numPick2) {
+            dtTxt01.setBackgroundColor(getColor(android.R.color.holo_green_light));
+            try {
+              dtTxt02.setBackgroundColor(getColor(android.R.color.holo_green_light));
+            }
+            catch(Exception ex) {}
+          }
+        else {
+            dtTxt01.setBackgroundColor(getColor(android.R.color.holo_red_light));
+            dtTxt02.setBackgroundColor(getColor(android.R.color.holo_red_light));
+          }
     }
 
     public void GetManual(String sbprint) {
@@ -404,7 +409,7 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
             //применить точки
             case R.id.applyDots:
                 if (NumberPicker1.isEnabled())
-                    mConnectedThread.write("tmp" + 1 + calcNPvalue(NumberPicker1.getValue()) + "\n");
+                    mConnectedThread.write("tmp" + 1 + NumberPicker1.getValue() + "\n");
                 if (NumberPicker2.isEnabled())
                     mConnectedThread.write("tmp" + 2 + calcNPvalue(NumberPicker2.getValue()) + "\n");
                 if (NumberPicker3.isEnabled())
@@ -446,7 +451,8 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         btnR3.setTextColor(getColor(android.R.color.white));
         btnR4.setTextColor(getColor(android.R.color.white));
         if (b != null)
-            b.setTextColor(getColor(android.R.color.holo_green_light));//setTextColor(17170452);
+            b.setTextColor(getColor(android.R.color.holo_green_light));
+            //setTextColor(17170452);
     }
 
     public String calcNPvalue(int value) {
@@ -564,7 +570,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     @Override
@@ -580,25 +585,8 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
     @Override
     public void onScrollStateChange(NumberPicker numberPicker, int newV) {
-        /*int Value = numberPicker.getValue();
-        int xxx = Value / 100;
-        int xx  = Value / 10 - xxx * 10;
-        int x   = Value % 10;
-        switch (numberPicker.getId()){
-            case R.id.numberPicker1:
-                mConnectedThread.write("tmp1" + xxx + xx + x + "\n");
-                break;
-            case R.id.numberPicker2:
-                mConnectedThread.write("tmp2" + xxx + xx + x + "\n");
-                break;
-            case R.id.numberPicker3:
-                mConnectedThread.write("tmp3" + xxx + xx + x + "\n");
-                break;
-            case R.id.numberPicker4:
-                mConnectedThread.write("tmp4" + xxx + xx + x + "\n");
-                break;
-        }*/
     }
+
     //настройка характеристик
     public NumberPicker setNumP(NumberPicker Num) {
         Num.setMaxValue(115);
@@ -626,8 +614,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
             tabHost.setCurrentTabByTag("tag2");
         if ( (dwnx - upx) <= -200 )
             tabHost.setCurrentTabByTag("tag1");
-        /*upy = dwnx - upx;
-        txtArduino.setText("dwnx " + dwnx + "; \nupx " + upx + ";\n <> " + upy);*/
         return true;
     }
 
