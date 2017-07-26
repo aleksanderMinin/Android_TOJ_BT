@@ -27,23 +27,22 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
 
 public class MainActivity extends Activity implements OnClickListener, OnItemSelectedListener, OnCheckedChangeListener, NumberPicker.OnScrollListener, View.OnTouchListener {
     private static final String TAG = "toj_bt1";
 
-    TextView txtArduino;
-    ToggleButton checkTBtn;
-    Button btnOn,btnOff,btnR1,btnR2,btnR3,btnR4,btnCncl,readDots,applyDots,btnReset;
-    NumberPicker NumberPicker1,NumberPicker2,NumberPicker3,NumberPicker4;
-    NumberPicker NumberPicker5,NumberPicker6,NumberPicker7,NumberPicker8;
-    TabHost tabHost;
-    Spinner coolTime,delayTime;
+    private TextView txtArduino;
+    private ToggleButton checkTBtn;
+    private Button btnOn,btnOff,btnCncl,readDots,applyDots,btnReset;
+    private Button[] rBtns = new Button[4];
+    private MyNP[] NumberPicker = new MyNP[8];
+    private TabHost tabHost;
+    private Spinner coolTime,delayTime;
     Handler h;
-    Integer FirstLaunch = 2;  //костыль, чтоб при запуске приложения не отсылал coolTime,delayTime;
-    float dwnx,upx;
-    LinearLayout dtTxt8,dtTxt7,dtTxt6,dtTxt5,dtTxt4,dtTxt3,dtTxt2,dtTxt1;
+    private Integer FirstLaunch = 2;  //костыль, чтоб при запуске приложения не отсылал coolTime,delayTime;
+    private float dwnx,upx;
+    private LinearLayout[] dtTxt = new LinearLayout[8];
 
     private static final int REQUEST_ENABLE_BT = 1;
     final int RECIEVE_MESSAGE = 1;        // Статус для Handler
@@ -51,7 +50,7 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
     private BluetoothSocket btSocket = null;
     private StringBuilder sb = new StringBuilder();
 
-    private ConnectedThread mConnectedThread;
+    public ConnectedThread mConnectedThread;
 
     // SPP UUID сервиса
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -103,6 +102,8 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
         //числовые
         MakeNP();
+        //точки
+        MakeDtTxt();
         //кнопки
         MakeButtons();
         //спинеры
@@ -152,13 +153,13 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
     private void GetTempState(String sbprint) {
         //toj_temp_377
         //123456789012
-        if ((sbprint.length() == 12) && sbprint.substring(0,9).equals("toj_temp_")) {
+        if ( isInMassage( "toj_temp_", 12, sbprint) ){
             int tempVal = Integer.valueOf(sbprint.substring(9,12));
-            setStatedtTxt(tempVal, 0, NumberPicker1.getValue(), dtTxt1, null);
-            setStatedtTxt(tempVal, NumberPicker2.getValue(), NumberPicker3.getValue(), dtTxt2, dtTxt3);
-            setStatedtTxt(tempVal, NumberPicker4.getValue(), NumberPicker5.getValue(), dtTxt4, dtTxt5);
-            setStatedtTxt(tempVal, NumberPicker6.getValue(), NumberPicker7.getValue(), dtTxt6, dtTxt7);
-            setStatedtTxt(tempVal, NumberPicker8.getValue(), 0 , dtTxt8, null);
+            setStatedtTxt(tempVal, 0, NumberPicker[0].getValue(), dtTxt[0], null);
+            setStatedtTxt(tempVal, NumberPicker[1].getValue(), NumberPicker[2].getValue(), dtTxt[1], dtTxt[2]);
+            setStatedtTxt(tempVal, NumberPicker[3].getValue(), NumberPicker[4].getValue(), dtTxt[3], dtTxt[4]);
+            setStatedtTxt(tempVal, NumberPicker[5].getValue(), NumberPicker[6].getValue(), dtTxt[5], dtTxt[6]);
+            setStatedtTxt(tempVal, NumberPicker[7].getValue(), 0 , dtTxt[7], null);
         }
     }
 
@@ -178,30 +179,26 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
           }
     }
 
-    public void GetManual(String sbprint) {
+    private boolean isInMassage (String thisString, int thisLenght,String massage) {
+        if ( massage.length() >= thisLenght
+                && massage.substring(0, thisString.length()).equals(thisString)  ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void GetManual(String sbprint) {
         //I get->manualx
         //I get->off
         //I get->on
         //I get->no
         //12345678901234
-        if ((sbprint.length() == 14 ) && sbprint.substring(0,13).equals("I get->manual"))
-            switch (Integer.valueOf(sbprint.substring(13,14))) {
-                case 1:
-                    setBtnsNoGreen(btnR1);
-                    break;
-                case 2:
-                    setBtnsNoGreen(btnR2);
-                    break;
-                case 3:
-                    setBtnsNoGreen(btnR3);
-                    break;
-                case 4:
-                    setBtnsNoGreen(btnR4);
-                    break;
-                default:
-                    break;
-            }
-        if ((sbprint.length() >= 9 ) && sbprint.substring(0,7).equals("I get->"))
+        if ( isInMassage("I get->manual", 14, sbprint) )
+            setBtnsNoGreen( rBtns[ Integer.valueOf(sbprint.substring(13,14)) - 1] );
+
+        if ( isInMassage("I get->", 9 , sbprint))
             switch (sbprint.substring(7,9)) {
                 case "on":
                     setBtnsNoGreen(btnOn);
@@ -223,22 +220,21 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
     private void MakeButtons() {
         btnOn = (Button) findViewById(R.id.btnOn);
         btnOff = (Button) findViewById(R.id.btnOff);
-        btnR1 = (Button) findViewById(R.id.btnR1);
-        btnR2 = (Button) findViewById(R.id.btnR2);
-        btnR3 = (Button) findViewById(R.id.btnR3);
-        btnR4 = (Button) findViewById(R.id.btnR4);
+        rBtns[0] = (Button) findViewById(R.id.btnR1);
+        rBtns[1] = (Button) findViewById(R.id.btnR2);
+        rBtns[2] = (Button) findViewById(R.id.btnR3);
+        rBtns[3] = (Button) findViewById(R.id.btnR4);
         btnCncl = (Button) findViewById(R.id.btnCncl);
         readDots = (Button) findViewById(R.id.readDots);
         applyDots = (Button) findViewById(R.id.applyDots);
         applyDots.setEnabled(false);
         btnReset = (Button) findViewById(R.id.btnReset);
 
+        for (int i=0; i<4; i++) {
+            rBtns[i].setOnClickListener(this);
+        }
         btnOn.setOnClickListener(this);
         btnOff.setOnClickListener(this);
-        btnR1.setOnClickListener(this);
-        btnR2.setOnClickListener(this);
-        btnR3.setOnClickListener(this);
-        btnR4.setOnClickListener(this);
         btnCncl.setOnClickListener(this);
         readDots.setOnClickListener(this);
         applyDots.setOnClickListener(this);
@@ -246,46 +242,35 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
     }
 
     private void MakeNP() {
-        NumberPicker1 = (NumberPicker) findViewById(R.id.numberPicker1);
-        NumberPicker1 = setNumP(NumberPicker1);
-        NumberPicker2 = (NumberPicker) findViewById(R.id.numberPicker2);
-        NumberPicker2 = setNumP(NumberPicker2);
-        NumberPicker3 = (NumberPicker) findViewById(R.id.numberPicker3);
-        NumberPicker3 = setNumP(NumberPicker3);
-        NumberPicker4 = (NumberPicker) findViewById(R.id.numberPicker4);
-        NumberPicker4 = setNumP(NumberPicker4);
-        NumberPicker5 = (NumberPicker) findViewById(R.id.numberPicker5);
-        NumberPicker5 = setNumP(NumberPicker5);
-        NumberPicker6 = (NumberPicker) findViewById(R.id.numberPicker6);
-        NumberPicker6 = setNumP(NumberPicker6);
-        NumberPicker7 = (NumberPicker) findViewById(R.id.numberPicker7);
-        NumberPicker7 = setNumP(NumberPicker7);
-        NumberPicker8 = (NumberPicker) findViewById(R.id.numberPicker8);
-        NumberPicker8 = setNumP(NumberPicker8);
+        NumberPicker[0].NP = (NumberPicker) findViewById(R.id.numberPicker1);
+        NumberPicker[1].NP = (NumberPicker) findViewById(R.id.numberPicker2);
+        NumberPicker[2].NP = (NumberPicker) findViewById(R.id.numberPicker3);
+        NumberPicker[3].NP = (NumberPicker) findViewById(R.id.numberPicker4);
+        NumberPicker[4].NP = (NumberPicker) findViewById(R.id.numberPicker5);
+        NumberPicker[5].NP = (NumberPicker) findViewById(R.id.numberPicker6);
+        NumberPicker[6].NP = (NumberPicker) findViewById(R.id.numberPicker7);
+        NumberPicker[7].NP = (NumberPicker) findViewById(R.id.numberPicker8);
 
-        NumberPicker2.setOnScrollListener(this);
-        NumberPicker3.setOnScrollListener(this);
-        NumberPicker4.setOnScrollListener(this);
-        NumberPicker5.setOnScrollListener(this);
-        NumberPicker6.setOnScrollListener(this);
-        NumberPicker7.setOnScrollListener(this);
-        NumberPicker8.setOnScrollListener(this);
-
-        dtTxt1 = (LinearLayout) findViewById(R.id.dtTxt1);
-        dtTxt2 = (LinearLayout) findViewById(R.id.dtTxt2);
-        dtTxt3 = (LinearLayout) findViewById(R.id.dtTxt3);
-        dtTxt4 = (LinearLayout) findViewById(R.id.dtTxt4);
-        dtTxt5 = (LinearLayout) findViewById(R.id.dtTxt5);
-        dtTxt6 = (LinearLayout) findViewById(R.id.dtTxt6);
-        dtTxt7 = (LinearLayout) findViewById(R.id.dtTxt7);
-        dtTxt8 = (LinearLayout) findViewById(R.id.dtTxt8);
+        for (int i=0; i<8; i++) {
+            NumberPicker[i].NP.setOnScrollListener(this);
+        }
+    }
+    private void MakeDtTxt() {
+        dtTxt[0] = (LinearLayout) findViewById(R.id.dtTxt1);
+        dtTxt[1] = (LinearLayout) findViewById(R.id.dtTxt2);
+        dtTxt[2] = (LinearLayout) findViewById(R.id.dtTxt3);
+        dtTxt[3] = (LinearLayout) findViewById(R.id.dtTxt4);
+        dtTxt[4] = (LinearLayout) findViewById(R.id.dtTxt5);
+        dtTxt[5] = (LinearLayout) findViewById(R.id.dtTxt6);
+        dtTxt[6] = (LinearLayout) findViewById(R.id.dtTxt7);
+        dtTxt[7] = (LinearLayout) findViewById(R.id.dtTxt8);
     }
 
     private void FlashDT(String message) {
         //String tmpstr;
         //delaytime -> x
         //123456789012345678
-        if (message.length() == 14 && message.substring(0,13).equals("delaytime -> ")) {
+        if ( isInMassage( "delaytime -> ", 13, message)) {
             try {
                 /*int dot = Integer.valueOf(message.substring(13, 14));
                 dot -= 1;*/
@@ -297,11 +282,11 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         }
     }
 
-    public void FlashCT(String message) {
+    private void FlashCT(String message) {
         //надо исправить
         //cooltime -> x
         //12345678901234567
-        if (message.length() == 13 && message.substring(0, 12).equals("cooltime -> ")) {
+        if ( isInMassage("cooltime -> ", 13, message )) {
             try {
                 /*int dot = Integer.valueOf(message.substring(13, 14));
                 dot -= 1;*/
@@ -313,10 +298,10 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         }
     }
 
-    public void FlashCheck(String message) {
+    private void FlashCheck(String message) {
         //Check in start -> x
         //1234567890123456789
-        if (message.length() == 19 && message.substring(0,18).equals("Check in start -> ")) {
+        if ( isInMassage("Check in start -> ", 19,  message)){
             checkTBtn.setEnabled(true);
             switch (message.substring(18,19)) {
                 case "1":
@@ -331,9 +316,9 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         }
     }
 
-    public void FlashtempDots(String message) {
+    private void FlashtempDots(String message) {
         String tmpstr;
-        if (message.length() >= 9 && message.substring(0,5).equals("temp_")) {
+        if ( isInMassage("temp_" ,9 , message)){
             //temp_i_xxx
             //1234567890
             //tmpstr = message.substring(0, 5);
@@ -343,45 +328,10 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
                 if (message.length() == 10)
                     tmpstr = tmpstr + message.substring(9, 10);
                 Integer tmpdot = Integer.valueOf(tmpstr);
-                switch (Integer.valueOf(message.substring(5,6))) {
-                    case 1:
-                        NumberPicker1.setValue(tmpdot);
-                        NumberPicker1.setEnabled(true);
-                        break;
-                    case 2:
-                        NumberPicker2.setValue(tmpdot);
-                        NumberPicker2.setEnabled(true);
-                        break;
-                    case 3:
-                        NumberPicker3.setValue(tmpdot);
-                        NumberPicker3.setEnabled(true);
-                        break;
-                    case 4:
-                        NumberPicker4.setValue(tmpdot);
-                        NumberPicker4.setEnabled(true);
-                        break;
-                    case 5:
-                        NumberPicker5.setValue(tmpdot);
-                        NumberPicker5.setEnabled(true);
-                        break;
-                    case 6:
-                        NumberPicker6.setValue(tmpdot);
-                        NumberPicker6.setEnabled(true);
-                        break;
-                    case 7:
-                        NumberPicker7.setValue(tmpdot);
-                        NumberPicker7.setEnabled(true);
-                        break;
-                    case 8:
-                        NumberPicker8.setValue(tmpdot);
-                        NumberPicker8.setEnabled(true);
-                        break;
-                    default:
-                        break;
-                }
+                NumberPicker[Integer.valueOf(message.substring(5,6)) - 1 ].setValue(tmpdot);
             } catch (NumberFormatException ex) {
-                System.err.println("Неверный формат строки!");
-                }
+                System.err.println("FlashtempDots опять пиздец!");
+            }
         }
     }
 
@@ -408,22 +358,10 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
                 break;
             //применить точки
             case R.id.applyDots:
-                if (NumberPicker1.isEnabled())
-                    mConnectedThread.write("tmp" + 1 + NumberPicker1.getValue() + "\n");
-                if (NumberPicker2.isEnabled())
-                    mConnectedThread.write("tmp" + 2 + calcNPvalue(NumberPicker2.getValue()) + "\n");
-                if (NumberPicker3.isEnabled())
-                    mConnectedThread.write("tmp" + 3 + calcNPvalue(NumberPicker3.getValue()) + "\n");
-                if (NumberPicker4.isEnabled())
-                    mConnectedThread.write("tmp" + 4 + calcNPvalue(NumberPicker4.getValue()) + "\n");
-                if (NumberPicker5.isEnabled())
-                    mConnectedThread.write("tmp" + 5 + calcNPvalue(NumberPicker5.getValue()) + "\n");
-                if (NumberPicker6.isEnabled())
-                    mConnectedThread.write("tmp" + 6 + calcNPvalue(NumberPicker6.getValue()) + "\n");
-                if (NumberPicker7.isEnabled())
-                    mConnectedThread.write("tmp" + 7 + calcNPvalue(NumberPicker7.getValue()) + "\n");
-                if (NumberPicker8.isEnabled())
-                    mConnectedThread.write("tmp" + 8 + calcNPvalue(NumberPicker8.getValue()) + "\n");
+                for (int i=0; i<8; i++) {
+                    if (NumberPicker[i].isEnabled())
+                        mConnectedThread.write("tmp" + 1 + NumberPicker[i].getValue() + "\n");
+                }
                 break;
             //считать точки
             case R.id.readDots:
@@ -441,33 +379,20 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         }
     }
 
-    public void setBtnsNoGreen(Button b) {
+    private void setBtnsNoGreen(Button b) {
         // 17170443 - white
         // 17170452 - holo_green_light
-        btnOn.setTextColor(getColor(android.R.color.white));
-        btnOff.setTextColor(getColor(android.R.color.white));
-        btnR1.setTextColor(getColor(android.R.color.white));
-        btnR2.setTextColor(getColor(android.R.color.white));
-        btnR3.setTextColor(getColor(android.R.color.white));
-        btnR4.setTextColor(getColor(android.R.color.white));
+        int whiteColor = getColor(android.R.color.white);
+        btnOn.setTextColor(whiteColor);
+        btnOff.setTextColor(whiteColor);
+
+        for (int i=0; i<4; i++) {
+            rBtns[i].setTextColor(whiteColor);
+        }
+
         if (b != null)
             b.setTextColor(getColor(android.R.color.holo_green_light));
             //setTextColor(17170452);
-    }
-
-    public String calcNPvalue(int value) {
-        String tmp = "";
-        try {
-            int xxx = value / 100;
-            int xx = value / 10 - xxx * 10;
-            int x = value % 10;
-            tmp += Integer.toString(xxx);
-            tmp += Integer.toString(xx);
-            tmp += Integer.toString(x);
-        } catch (NumberFormatException e) {
-            System.err.println("calcNPvalue Неверный формат строки!");
-        }
-        return tmp;
     }
 
     @Override
@@ -585,15 +510,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
     @Override
     public void onScrollStateChange(NumberPicker numberPicker, int newV) {
-    }
-
-    //настройка характеристик
-    public NumberPicker setNumP(NumberPicker Num) {
-        Num.setMaxValue(115);
-        Num.setMinValue(25);
-        Num.setWrapSelectorWheel(false);
-        Num.setEnabled(false);
-        return Num;
     }
 
     @Override
